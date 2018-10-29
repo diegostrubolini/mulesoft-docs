@@ -1,26 +1,35 @@
 = About Dynamic Ports
 :version-info: 2.0 and later
-:keywords: mule, esb, tests, qa, quality assurance, verify, functional testing, unit testing, stress testing, assert
+:keywords: mule, esb, tests, qa, quality assurance, verify, functional testing, unit testing, stress testing, port
 
-The Assert Equals Event Processor allows you to run assertions in order to validate the state of a Mule Event's content. +
-This Event Processor can be used to validate the Mule Event after the production code runs.
+The Dynamic Port global element allows you to bind a free port to a property.
+It will search for a free port available and can be narrowed to a specific range.
 
-For example, to assert that a payload is equal to a certain value, you can configure the Assert-Equals processor the following way:
+
+For example, a dynamic port would look something like this:
 
 [source,xml,linenums]
 ----
-<munit-tools:assert-equals
-  actual="#[payload]"
-  expected="#['example']"
-  message="The payload should be ‘example’"/>
+<munit:dynamic-port propertyName="a.dynamic.port"/>
 ----
 
-If this assertion fails, the processor throws a `java.lang.AssertionError`.
+and it can be used in the http configuration:
+
+[source,xml,linenums]
+----
+<http:request-config name="httpRequestConfig">
+    <http:request-connection host="localhost" port="${a.dynamic.port}"/>
+</http:request-config>
+----
+
+Additionally you can set min and max values from where to get the port:
+
+[source,xml,linenums]
+----
+<munit:dynamic-port propertyName="a.dynamic.port" min="6000" max="7000"/>
+----
 
 == See Also
 
-* link:/munit/v/2.2/munit-matchers[About MUnit Matchers]
-* link:/munit/v/2.2/fail-event-processor[About Fail Event Processor]
-* link:/munit/v/2.2/set-event-processor[About Set Event Processor]
-* link:/munit/v/2.2/mock-message-processor[About Mock When Event Processor]
-* link:/munit/v/2.2/verify-message-processor[About Verify Event Processor]
+* link:/munit/v/2.2/dynamic-directories[About Dynamic Directories]
+* link:/munit/v/2.2/storage-processors[About Storage Processors]
